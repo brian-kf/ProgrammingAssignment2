@@ -1,8 +1,14 @@
 ## Functions that can compute and cache the inverse of a matrix.
+## Note: This is the updated version - the problem with the previous version was
+##		 that we could set something which is not the real inverse of the matrix object,
+##		 with setInv()/setInverse().
+## For Evaluation: please look at the previous commit (which is probably what 
+##				   the instructors expect us to do).
 
-## "This function creates a matrix object that can cache its inverse." (from the README.md file)
+
+## This function creates a matrix object that can compute, and cache its inverse.
 makeCacheMatrix <- function(x = matrix()) {
-	## Create a matrix object that can cache its inverse.
+	## Create a matrix object that can compute and cache its inverse.
 	inverse <- NULL
 	
 	getMatrix <- function() {
@@ -15,31 +21,17 @@ makeCacheMatrix <- function(x = matrix()) {
 	}
 	
 	getInverse <- function() {
+		if(is.null(inverse))
+			inverse <<- solve(x)
 		inverse
 	}
 	
-	setInverse <- function(inv) {
-		inverse <<- inv
-	}
-	
-	list(get = getMatrix, set = setMatrix, getInv = getInverse, setInv = setInverse)
+	list(get = getMatrix, set = setMatrix, getInv = getInverse)
 }
 
 
-## "This function computes the inverse of the special matrix returned by makeCacheMatrix above. If the inverse has already been calculated (and the matrix has not changed), then the cachesolve should retrieve the inverse from the cache." (from the README.md file)
+## Update: this cacheSolve function don't really have a purpose
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-        inverse <- x$getInv()
-        
-        ## If the inverse is not null, then we return the cached version
-        if(!is.null(inverse)) {
-        	print("Returning the cached inverse")
-        	return(inverse)
-        }
-        
-        ## Else, we compute the inverse, save it, and return it
-        print("Computing the inverse and caching it")
-        inverse <- solve(x$get())
-        x$setInv(inverse)
-        inverse
+    ## Return a matrix that is the inverse of 'x'
+    x$getInv()
 }
